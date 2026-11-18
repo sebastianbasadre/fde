@@ -10,7 +10,18 @@ A coding agent that covers both jobs of a small product team: **product manageme
 
 ## The team
 
-**Subagents are agents.** Each one is a file in [`.claude/agents/`](.claude/agents/): a role with its own instructions, its own tools and a fresh context. The main Claude Code session coordinates: it hands a task to the role whose description fits, or to the one you name ("ask the reviewer to look at this"), reads what comes back, and keeps every decision. Each role works by applying the skills below.
+**Subagents are agents.** Each one is a file in [`.claude/agents/`](.claude/agents/): a role with its own instructions, its own tools and a fresh context. Each role works by applying the skills below.
+
+### How work gets delegated
+
+You talk to the main Claude Code session; it coordinates. You don't have to name a role: ask "is this safe to ship?" and it hands the task to Security; "what should we build?" goes to the PM; "write a test for this" goes to QA. You can still name one ("ask the reviewer to look at this"). The session reads what comes back, tells you which role did the work, and keeps every decision.
+
+Two things make this happen, and both are needed:
+
+- **Each role's description says "Use proactively when…"**, the signal Claude Code uses to delegate without being asked.
+- **`AGENTS.md` § 1.7 has the rule "Delegate by role"**: the session hands each task to the matching subagent and never writes the review, the security audit or the tests itself, so the one who builds is never the one who checks.
+
+In a test without the two, the session did every task itself. With them, it delegated each of the three requests above to the right role.
 
 | Role | File | Does | Can edit |
 |---|---|---|---|
