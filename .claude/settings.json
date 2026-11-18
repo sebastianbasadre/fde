@@ -1,4 +1,12 @@
 {
+  "extraKnownMarketplaces": {
+    "product-engineering": {
+      "source": {
+        "source": "github",
+        "repo": "phuryn/product-engineering"
+      }
+    }
+  },
   "enabledPlugins": {
     "product@product-engineering": true,
     "ai-shipping@product-engineering": true,

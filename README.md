@@ -55,13 +55,57 @@ They come in six packs:
 |---|---|
 | [`AGENTS.md`](AGENTS.md) | The instructions every agent reads first. **Section 1** is how we build any app: ownership and authorization, threat model, stack, testing and delivery, working rules, and a table of what to open at each moment. **Section 2** is the product, left empty until the owner says what to build. |
 | [`CLAUDE.md`](CLAUDE.md) | One line, `@AGENTS.md`, so Claude Code loads the same file. |
-| [`.claude/settings.json`](.claude/settings.json) | Enables the skill packs `AGENTS.md` relies on: `product`, `ai-shipping`, `agent-teams`, `agent-harness`, `app-stack`, `work-humanizer`. |
+| [`.claude/settings.json`](.claude/settings.json) | Declares the plugin catalog and enables the skill packs `AGENTS.md` relies on: `product`, `ai-shipping`, `agent-teams`, `agent-harness`, `app-stack`, `work-humanizer`. |
 | [`.claude/agents/`](.claude/agents/) | The six subagents: PM, Architect, Designer, Security, QA, Reviewer. |
 | [`budgets.json`](budgets.json) + [`scripts/check_budgets.py`](scripts/check_budgets.py) | A word budget for `AGENTS.md` (3,800 words), checked in the test gate, so the entry file stays short enough to be read in full every session. |
 
+## Install
+
+### What you need
+
+- [Claude Code](https://claude.com/claude-code), signed in (`/login`).
+- Git, and Python 3 for the word-budget check.
+- Optional: the Codex, Grok or Gemini CLI, so reviews can come from another model family. Without them, the Reviewer subagent is the fallback.
+
+### 1. Get the template as your own project
+
+```sh
+git clone https://github.com/sebastianbasadre/fde.git my-product
+cd my-product
+git remote remove origin   # then add your own repository as origin
+```
+
+Keep the folder on a local disk. On a network share, Claude Code did not load `CLAUDE.md` or `AGENTS.md`.
+
+### 2. Install the skill packs
+
+The six packs come from the public plugin catalog [`phuryn/product-engineering`](https://github.com/phuryn/product-engineering). `.claude/settings.json` declares that catalog and turns the packs on, so when you open the folder in Claude Code and trust it, Claude Code may offer to install them. If it doesn't, or to be sure, install them from a terminal:
+
+```sh
+claude plugin marketplace add phuryn/product-engineering
+claude plugin install product@product-engineering
+claude plugin install ai-shipping@product-engineering
+claude plugin install agent-teams@product-engineering
+claude plugin install agent-harness@product-engineering
+claude plugin install app-stack@product-engineering
+claude plugin install work-humanizer@product-engineering
+```
+
+They install once for your user and update themselves; nothing pins a version.
+
+The subagents need no install: they are files in `.claude/agents/` and load with the folder.
+
+### 3. Check it
+
+Open Claude Code in the folder and run:
+
+- `/agents`: the six roles appear (pm, architect, designer, security, qa, reviewer).
+- `/plugin`: the six packs appear, enabled.
+- `python scripts/check_budgets.py` in a terminal (`python3` on macOS and Linux): prints `result: ok`.
+
 ## Starting a product from it
 
-1. Copy the repository and open it in Claude Code (from a local folder, not a network share: on one, Claude Code did not load `CLAUDE.md` or `AGENTS.md`).
+1. Open the folder in Claude Code.
 2. Describe your idea. The agent runs the `product:propose` skill, then fills in Section 2 of `AGENTS.md` at the brief stage, following the `app-lifecycle` skill.
 3. From there, each phase follows the plan the agent writes in `docs/product/plan.md`, with an independent review before every push that deploys and the owner's go before anything irreversible.
 
