@@ -1,5 +1,11 @@
 {
   "extraKnownMarketplaces": {
+    "fde": {
+      "source": {
+        "source": "github",
+        "repo": "sebastianbasadre/fde"
+      }
+    },
     "product-engineering": {
       "source": {
         "source": "github",
@@ -8,11 +14,15 @@
     }
   },
   "enabledPlugins": {
+    "app-stack@fde": true,
+    "ai-shipping@fde": true,
+    "agent-teams@fde": true,
+    "agent-harness@fde": true,
     "product@product-engineering": true,
-    "ai-shipping@product-engineering": true,
-    "agent-teams@product-engineering": true,
-    "agent-harness@product-engineering": true,
-    "app-stack@product-engineering": true,
-    "work-humanizer@product-engineering": true
+    "work-humanizer@product-engineering": true,
+    "app-stack@product-engineering": false,
+    "ai-shipping@product-engineering": false,
+    "agent-teams@product-engineering": false,
+    "agent-harness@product-engineering": false
   }
 }

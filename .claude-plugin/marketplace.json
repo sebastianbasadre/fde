@@ -1,0 +1,35 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "fde",
+  "version": "1.0.0",
+  "description": "The engineering skill packs of the fde template.",
+  "owner": {
+    "name": "sebastianbasadre"
+  },
+  "plugins": [
+    {
+      "name": "ai-shipping",
+      "description": "Ship AI-built apps: document the app, review it for correctness, security and performance, have a fresh reviewer clear every push that deploys and every release, round after round, prove it with a test harness that fakes the right side, and release through a gate with the owner's go. Where the free pm-ai-shipping plugin moved: turn that one off once this is installed.",
+      "source": "./plugins/ai-shipping",
+      "category": "development"
+    },
+    {
+      "name": "agent-teams",
+      "description": "Work with other coding agents as partners: brief any delegate with the why, and drive the Codex CLI, the Grok CLI or Claude Code headless from another agent as a peer, builder or fresh reviewer. Gemini through Antigravity is an option the user agrees to first. The review loop itself is independent-review, in ai-shipping.",
+      "source": "./plugins/agent-teams",
+      "category": "development"
+    },
+    {
+      "name": "agent-harness",
+      "description": "Make your own agent setup reliable: instruction files that are met at the moment they apply, rules held by hooks instead of prose, status that survives context compaction, the handover the next session starts from, a session's friction turned into a setup fix, and the Windows shell traps that break agents.",
+      "source": "./plugins/agent-harness",
+      "category": "development"
+    },
+    {
+      "name": "app-stack",
+      "description": "Build a SaaS app with coding agents on Next.js, Supabase, Clerk and Netlify: the path from idea to production, multi-tenant authorization, the production choices for Supabase and Clerk, environments and secrets, product design, transactional email, uptime monitoring, cookieless analytics, legal pages, remote MCP servers, ChatGPT plugins and embedded Claude agents.",
+      "source": "./plugins/app-stack",
+      "category": "development"
+    }
+  ]
+}

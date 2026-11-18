@@ -36,17 +36,16 @@ The roles that judge (PM, Security, Reviewer) edit nothing, so a finding is neve
 
 ## The skills
 
-They come in six packs:
+They come in six packs. The four engineering packs live in this repository, in [`plugins/`](plugins/); the other two install from their original catalog.
 
-| Pack | Side | What it teaches the agent |
-|---|---|---|
-| `product` | PM | Research an idea and propose what to build; customer segments, the first market to win, competitors, value proposition and value curve, growth loops |
-| `app-stack` | Engineering | The path from idea to production, stage by stage; the default stack (Next.js, Supabase, Clerk, Netlify); authorization in a multi-tenant SaaS; UI design; email, analytics, monitoring, legal pages, embedded agents |
-| `ai-shipping` | Engineering | Tests where green means something; independent reviews; release gates; security and performance audits; docs that match the code |
-| `agent-teams` | Engineering | Delegating to other agents as builders or reviewers, and checking what they report |
-| `agent-harness` | Both | Writing agent instructions that get followed; hooks that make a rule impossible to break; status reports for long work; Windows shell quirks |
-| `work-humanizer` | Both | Editing AI-sounding writing so a careful person could have written it |
-
+| Pack | Side | Where it comes from | What it teaches the agent |
+|---|---|---|---|
+| `product` | PM | `phuryn/product-engineering` | Research an idea and propose what to build; customer segments, the first market to win, competitors, value proposition and value curve, growth loops |
+| `app-stack` | Engineering | this repo, `plugins/` | The path from idea to production, stage by stage; the default stack (Next.js, Supabase, Clerk, Netlify); authorization in a multi-tenant SaaS; UI design; email, analytics, monitoring, legal pages, embedded agents |
+| `ai-shipping` | Engineering | this repo, `plugins/` | Tests where green means something; independent reviews; release gates; security and performance audits; docs that match the code |
+| `agent-teams` | Engineering | this repo, `plugins/` | Delegating to other agents as builders or reviewers, and checking what they report |
+| `agent-harness` | Both | this repo, `plugins/` | Writing agent instructions that get followed; hooks that make a rule impossible to break; status reports for long work; Windows shell quirks |
+| `work-humanizer` | Both | `phuryn/product-engineering` | Editing AI-sounding writing so a careful person could have written it |
 `AGENTS.md` decides when each one applies: its § 1.8 table names, for every moment (planning a phase, fixing a bug, pushing, releasing), the rule and the skill to open.
 
 ## What's here
@@ -55,7 +54,8 @@ They come in six packs:
 |---|---|
 | [`AGENTS.md`](AGENTS.md) | The instructions every agent reads first. **Section 1** is how we build any app: ownership and authorization, threat model, stack, testing and delivery, working rules, and a table of what to open at each moment. **Section 2** is the product, left empty until the owner says what to build. |
 | [`CLAUDE.md`](CLAUDE.md) | One line, `@AGENTS.md`, so Claude Code loads the same file. |
-| [`.claude/settings.json`](.claude/settings.json) | Declares the plugin catalog and enables the skill packs `AGENTS.md` relies on: `product`, `ai-shipping`, `agent-teams`, `agent-harness`, `app-stack`, `work-humanizer`. |
+| [`.claude/settings.json`](.claude/settings.json) | Declares the two plugin catalogs (this repo, `fde`, and `product-engineering`) and enables the six skill packs `AGENTS.md` relies on. |
+| [`plugins/`](plugins/) + [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | The four engineering skill packs, and the catalog that lets Claude Code install them from this repository. |
 | [`.claude/agents/`](.claude/agents/) | The six subagents: PM, Architect, Designer, Security, QA, Reviewer. |
 | [`budgets.json`](budgets.json) + [`scripts/check_budgets.py`](scripts/check_budgets.py) | A word budget for `AGENTS.md` (3,800 words), checked in the test gate, so the entry file stays short enough to be read in full every session. |
 
@@ -79,19 +79,20 @@ Keep the folder on a local disk. On a network share, Claude Code did not load `C
 
 ### 2. Install the skill packs
 
-The six packs come from the public plugin catalog [`phuryn/product-engineering`](https://github.com/phuryn/product-engineering). `.claude/settings.json` declares that catalog and turns the packs on, so when you open the folder in Claude Code and trust it, Claude Code may offer to install them. If it doesn't, or to be sure, install them from a terminal:
+The four engineering packs install from this repository's own catalog, `fde`; the other two from [`phuryn/product-engineering`](https://github.com/phuryn/product-engineering). `.claude/settings.json` declares both catalogs and turns the packs on, so when you open the folder in Claude Code and trust it, Claude Code may offer to install them. If it doesn't, or to be sure, install them from a terminal:
 
 ```sh
+claude plugin marketplace add sebastianbasadre/fde
 claude plugin marketplace add phuryn/product-engineering
+claude plugin install app-stack@fde
+claude plugin install ai-shipping@fde
+claude plugin install agent-teams@fde
+claude plugin install agent-harness@fde
 claude plugin install product@product-engineering
-claude plugin install ai-shipping@product-engineering
-claude plugin install agent-teams@product-engineering
-claude plugin install agent-harness@product-engineering
-claude plugin install app-stack@product-engineering
 claude plugin install work-humanizer@product-engineering
 ```
 
-They install once for your user and update themselves; nothing pins a version.
+They install once for your user. If you already had the engineering packs from `product-engineering`, the template's settings turn those off in this folder, so each skill loads once.
 
 The subagents need no install: they are files in `.claude/agents/` and load with the folder.
 
