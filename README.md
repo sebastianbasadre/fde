@@ -1,42 +1,85 @@
-# Product engineering template
+# fde — product engineering template
 
-A starting point for building a SaaS product with coding agents (Claude Code first; Codex, Grok and Gemini as builders or reviewers). It holds no product: it holds the instructions that tell an agent how to take one from an idea to production, safely.
+A starting point for building a SaaS product with Claude Code as your whole product team: it researches the idea, plans it, designs it, builds it, tests it, reviews it and ships it, while you make the decisions. The repository holds no product. It holds the rules, the roles and the methods the agent follows to take one from an idea to production safely.
 
-## What it is
+## What you'd use it for
 
-A coding agent that covers both jobs of a small product team: **product management** (is this worth building, for whom, what to build first) and **engineering** (build it, test it, review it, ship it). The template is not code. It is the agent's instructions, `AGENTS.md`, a set of **skills** it switches on, and six **subagents** it can hand work to.
+- **Building a product on your own.** You have an idea and no team. You describe it; the agent does the work a PM, an architect, a designer, QA and a security reviewer would do, and stops to ask you only for the decisions that are yours.
+- **Testing an idea before writing code.** The PM researches the market and competitors with sources, separates evidence from guesses, and proposes the cheapest test that would prove the idea wrong. You can stop there.
+- **Making an AI-built prototype shippable.** Point it at an existing app: it documents what the code does, reviews it, adds the tests that are missing, audits security against the documented rules, and releases through a gate.
+- **Making every project you build with agents work the same way.** Copy the template into each new repository and every session starts with the same rules: tests with every fix, an independent review before every deploy, your go before anything irreversible.
 
-**Skills are not agents.** A skill is a packaged method: instructions, checklists and scripts that the agent loads when a task calls for it, the way a person opens a playbook. Skills change *how* the agent works, not *who* works. The `agent-teams` pack also teaches it to hand a build or a review to an agent from another vendor (Codex, Grok, Gemini), so the code is never cleared by the session that wrote it.
+Less of a fit: products far from a web SaaS (native mobile apps, games, hardware). The rules still apply, but the default stack and many skills assume a web app with sign-in and a database.
+
+## How it works
+
+Three pieces work together:
+
+```
+You ──talk to──▶ Claude Code, the main session (coordinates, keeps every decision)
+                   │  reads AGENTS.md first: the rules and when each applies
+                   │
+                   ├──hands tasks to──▶ 6 subagents (PM, Architect, Designer, Security, QA, Reviewer)
+                   │                     each in a fresh context, with its own tools
+                   │
+                   └──both apply──────▶ 45 skills in 6 packs (the methods: how to research,
+                                         plan, design, test, review, release)
+```
+
+1. **The rules: `AGENTS.md`.** Every session reads it first. Section 1 is how any app gets built here: everything belongs to a workspace, permissions are checked by server code, a bug fix comes with a test that fails before it, an independent review clears every push that deploys, nothing irreversible happens without your go. Its § 1.8 table names, for each moment (planning, fixing a bug, pushing, releasing), the rule that applies and the skill to open. Section 2 describes your product; it stays empty until you say what to build.
+2. **The roles: `.claude/agents/`.** Six subagents. The main session hands each task to the matching role without you naming it, reads what comes back and tells you who did the work. The roles that judge edit nothing, so the one who builds is never the one who checks.
+3. **The methods: `plugins/`.** Skills are not agents: each is a packaged method (instructions, checklists, scripts) that an agent opens when a task needs it, the way a person opens a playbook. They change *how* the work is done, not *who* does it.
+
+### From idea to production
+
+The `app-lifecycle` skill sets the path. Each stage has a done-when, and the agent groups stages into phases you can try:
+
+| Stage | What happens | Who acts |
+|---|---|---|
+| Brief | Your idea becomes Section 2 of `AGENTS.md` and a brief; open questions go to a decision log | PM proposes, you confirm |
+| Design | The jobs each screen serves, a design kit, two directions to choose from | Designer draws, you pick |
+| Screens on sample data | Every screen works with fake data, no database yet; you click through it | Main session builds, Designer checks |
+| Setup and first real slice | Sign-in, the database, the first real feature, tests that two users can't see each other's data | Architect plans, main session builds, QA tests, Security checks |
+| Publish | First deploy, shared with nobody | Reviewer clears the push |
+| Front door | Landing and legal pages made true, pricing if it bills | You approve the legal text |
+| Go live | Production, the custom domain, a review of the whole product | You give the go |
+| Every release after | Checklist, review, audits, promotion, checks after | Reviewer clears, you give the go |
+
+### What you decide, what the agent decides
+
+- **Yours:** what the product does and for whom, the design direction, the legal text, anything that costs money, and the go before production, publishing or deleting anything public.
+- **The agent's:** everything the skills already have a default for (stack, structure, tests, docs), applied without asking. When neither the rules nor the skills say, it decides and tells you in its summary.
 
 ## The team
 
-**Subagents are agents.** Each one is a file in [`.claude/agents/`](.claude/agents/): a role with its own instructions, its own tools and a fresh context. Each role works by applying the skills below.
+| Role | Does | Can edit |
+|---|---|---|
+| **PM** | Researches an idea, segments, competitors, value proposition; proposes what to build and the decision you must make | nothing |
+| **Architect** | Turns agreed scope into a plan: stages, data model, permissions, integrations, risks and estimates | the architecture doc and plan, when asked |
+| **Designer** | The design kit, screens and artboards; checks phone and desktop widths and both themes | `design/` and screen styles and markup |
+| **Security** | Reads the code against the threat model and reports concrete attacks | nothing |
+| **QA** | Decides what to test, writes tests, proves fixes with failing-first tests, runs the gate | tests and test docs |
+| **Reviewer** | Independent review of a diff before a push or release, until a round is clean | nothing |
 
-### How work gets delegated
+You don't have to name a role; ask in plain words:
 
-You talk to the main Claude Code session; it coordinates. You don't have to name a role: ask "is this safe to ship?" and it hands the task to Security; "what should we build?" goes to the PM; "write a test for this" goes to QA. You can still name one ("ask the reviewer to look at this"). The session reads what comes back, tells you which role did the work, and keeps every decision.
+| You say | Who handles it |
+|---|---|
+| "I have an idea: …" / "what should we build first?" | PM |
+| "Plan the first real slice" | Architect |
+| "Draw the home screen" | Designer |
+| "Build it" | the main session |
+| "Is this safe to ship?" | Security |
+| "Write a test for this bug" | QA |
+| "Push it" / "release it" | Reviewer first; then it pushes, or waits for your go to release |
 
-Two things make this happen, and both are needed:
+Two things make the delegation happen, and both are needed: each role's description says "Use proactively when…", and `AGENTS.md` § 1.7 has the rule "Delegate by role". In a test without them, the main session did every task itself; with them, it handed each request to the right role.
 
-- **Each role's description says "Use proactively when…"**, the signal Claude Code uses to delegate without being asked.
-- **`AGENTS.md` § 1.7 has the rule "Delegate by role"**: the session hands each task to the matching subagent and never writes the review, the security audit or the tests itself, so the one who builds is never the one who checks.
-
-In a test without the two, the session did every task itself. With them, it delegated each of the three requests above to the right role.
-
-| Role | File | Does | Can edit |
-|---|---|---|---|
-| PM | `pm.md` | Researches an idea, segments, competitors, value proposition; proposes what to build and the decision the owner must make | nothing |
-| Architect | `architect.md` | Turns agreed scope into a plan: stages, data model, permissions, integrations, risks and estimates | the architecture doc and plan, when asked |
-| Designer | `designer.md` | The design kit, screens and artboards; checks phone and desktop widths and both themes | `design/` and screen styles and markup |
-| Security | `security.md` | Reads the code against the threat model and reports concrete attacks | nothing |
-| QA | `qa.md` | Decides what to test, writes tests, proves fixes with failing-first tests, runs the gate | tests and test docs |
-| Reviewer | `reviewer.md` | Independent review of a diff before a push or release, until a round is clean | nothing |
-
-The roles that judge (PM, Security, Reviewer) edit nothing, so a finding is never quietly "fixed" by the one who raised it. The owner still decides what the product does, picks the design direction, and gives the go before anything irreversible. `AGENTS.md` prefers a reviewer from another model family; the Reviewer subagent is the fallback when none can run.
+`AGENTS.md` prefers a reviewer from another model family (Codex, Grok or Gemini, through the `agent-teams` skills). The Reviewer subagent is the fallback when none is installed.
 
 ## The skills
 
-They come in six packs, all in this repository, in [`plugins/`](plugins/).
+Six packs, 45 skills, all in [`plugins/`](plugins/):
 
 | Pack | Side | What it teaches the agent |
 |---|---|---|
@@ -46,18 +89,6 @@ They come in six packs, all in this repository, in [`plugins/`](plugins/).
 | `agent-teams` | Engineering | Delegating to other agents as builders or reviewers, and checking what they report |
 | `agent-harness` | Both | Writing agent instructions that get followed; hooks that make a rule impossible to break; status reports for long work; Windows shell quirks |
 | `work-humanizer` | Both | Editing AI-sounding writing so a careful person could have written it |
-`AGENTS.md` decides when each one applies: its § 1.8 table names, for every moment (planning a phase, fixing a bug, pushing, releasing), the rule and the skill to open.
-
-## What's here
-
-| File | What it does |
-|---|---|
-| [`AGENTS.md`](AGENTS.md) | The instructions every agent reads first. **Section 1** is how we build any app: ownership and authorization, threat model, stack, testing and delivery, working rules, and a table of what to open at each moment. **Section 2** is the product, left empty until the owner says what to build. |
-| [`CLAUDE.md`](CLAUDE.md) | One line, `@AGENTS.md`, so Claude Code loads the same file. |
-| [`.claude/settings.json`](.claude/settings.json) | Declares this repository as a plugin catalog (`fde`) and enables the six skill packs `AGENTS.md` relies on. |
-| [`plugins/`](plugins/) + [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | The six skill packs, their license (`plugins/LICENSE.md`), and the catalog that lets Claude Code install them from this repository. |
-| [`.claude/agents/`](.claude/agents/) | The six subagents: PM, Architect, Designer, Security, QA, Reviewer. |
-| [`budgets.json`](budgets.json) + [`scripts/check_budgets.py`](scripts/check_budgets.py) | A word budget for `AGENTS.md` (3,800 words), checked in the test gate, so the entry file stays short enough to be read in full every session. |
 
 ## Install
 
@@ -65,7 +96,7 @@ They come in six packs, all in this repository, in [`plugins/`](plugins/).
 
 - [Claude Code](https://claude.com/claude-code), signed in (`/login`).
 - Git, and Python 3 for the word-budget check.
-- Optional: the Codex, Grok or Gemini CLI, so reviews can come from another model family. Without them, the Reviewer subagent is the fallback.
+- Optional: the Codex, Grok or Gemini CLI, so reviews can come from another model family.
 
 ### 1. Get the template as your own project
 
@@ -91,9 +122,7 @@ claude plugin install agent-harness@fde
 claude plugin install work-humanizer@fde
 ```
 
-They install once for your user and change only when this repository changes. If you already had the same packs from another catalog, the template's settings turn those off in this folder, so each skill loads once.
-
-The subagents need no install: they are files in `.claude/agents/` and load with the folder.
+They install once for your user and change only when this repository changes. If you already had the same packs from another catalog, the template's settings turn those off in this folder, so each skill loads once. The subagents need no install: they are files in `.claude/agents/` and load with the folder.
 
 ### 3. Check it
 
@@ -103,22 +132,27 @@ Open Claude Code in the folder and run:
 - `/plugin`: the six packs appear, enabled.
 - `python scripts/check_budgets.py` in a terminal (`python3` on macOS and Linux): prints `result: ok`.
 
-## Starting a product from it
+## Your first session
 
-1. Open the folder in Claude Code.
-2. Describe your idea. The agent runs the `product:propose` skill, then fills in Section 2 of `AGENTS.md` at the brief stage, following the `app-lifecycle` skill.
-3. From there, each phase follows the plan the agent writes in `docs/product/plan.md`, with an independent review before every push that deploys and the owner's go before anything irreversible.
+Open Claude Code in the folder and describe your idea in a few sentences: who it is for, what problem it solves, what you already know. The PM researches it and comes back with a proposal and the decisions it needs from you. Once you confirm, the agent fills in Section 2 of `AGENTS.md`, writes the plan in `docs/product/plan.md`, and works through the stages above, stopping at each point that is yours to decide.
 
-The default stack the agent proposes is Next.js, Supabase, Clerk, Netlify, and Vitest with Playwright; each choice is confirmed by the owner and recorded in § 1.3.
+The default stack it proposes is Next.js, Supabase, Clerk, Netlify, and Vitest with Playwright; each choice is confirmed by you and recorded in `AGENTS.md` § 1.3.
 
 ## Adapting it
 
-Keep Section 1's mechanics; fill in its owner's choices (§ 1.6), the installed packs and the repository environment for your own setup. Replace Section 2 entirely.
+Keep Section 1's mechanics. Fill in its owner's choices (§ 1.6: which model builds and which reviews, what needs your go, your design taste), the installed packs and the repository environment for your own setup. Replace Section 2 entirely. The skills in `plugins/` are yours to edit; they change only when you change them.
 
-## Checks
+## What's here
 
-```sh
-python scripts/check_budgets.py
-```
+| File | What it does |
+|---|---|
+| [`AGENTS.md`](AGENTS.md) | The rules every agent reads first: Section 1 how any app is built, Section 2 the product |
+| [`CLAUDE.md`](CLAUDE.md) | One line, `@AGENTS.md`, so Claude Code loads the same file |
+| [`.claude/agents/`](.claude/agents/) | The six subagents |
+| [`.claude/settings.json`](.claude/settings.json) | Declares this repository as a plugin catalog (`fde`) and enables the six skill packs |
+| [`plugins/`](plugins/) + [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) | The six skill packs and the catalog that installs them |
+| [`budgets.json`](budgets.json) + [`scripts/check_budgets.py`](scripts/check_budgets.py) | A word budget for `AGENTS.md` (3,800 words), so the entry file stays short enough to be read in full every session |
 
-Exits 0 when `AGENTS.md` is within its budget.
+## License
+
+The skill packs in `plugins/` are under the MIT License; see [`plugins/LICENSE.md`](plugins/LICENSE.md).
