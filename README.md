@@ -1,4 +1,6 @@
-# fde — product engineering template
+# fde — Forward Deployed Engineer
+
+**A product engineering template for Claude Code.** A forward deployed engineer sits next to the customer and owns the whole loop, from understanding the problem to shipping the fix, without handing off to a separate product, design or QA team. This template gives a coding agent that same job.
 
 A starting point for building a SaaS product with Claude Code as your whole product team: it researches the idea, plans it, designs it, builds it, tests it, reviews it and ships it, while you make the decisions. The repository holds no product. It holds the rules, the roles and the methods the agent follows to take one from an idea to production safely.
 
