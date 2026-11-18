@@ -5,24 +5,20 @@
         "source": "github",
         "repo": "sebastianbasadre/fde"
       }
-    },
-    "product-engineering": {
-      "source": {
-        "source": "github",
-        "repo": "phuryn/product-engineering"
-      }
     }
   },
   "enabledPlugins": {
+    "product@fde": true,
     "app-stack@fde": true,
     "ai-shipping@fde": true,
     "agent-teams@fde": true,
     "agent-harness@fde": true,
-    "product@product-engineering": true,
-    "work-humanizer@product-engineering": true,
+    "work-humanizer@fde": true,
+    "product@product-engineering": false,
     "app-stack@product-engineering": false,
     "ai-shipping@product-engineering": false,
     "agent-teams@product-engineering": false,
-    "agent-harness@product-engineering": false
+    "agent-harness@product-engineering": false,
+    "work-humanizer@product-engineering": false
   }
 }

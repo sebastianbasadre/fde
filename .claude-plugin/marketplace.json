@@ -2,11 +2,23 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "fde",
   "version": "1.0.0",
-  "description": "The engineering skill packs of the fde template.",
+  "description": "The skill packs of the fde template: product management and engineering.",
   "owner": {
     "name": "sebastianbasadre"
   },
   "plugins": [
+    {
+      "name": "product",
+      "description": "Decide what to build before building it: find where the work stands, research an idea and propose hypotheses with their sources in one artifact with key screens, then competitors and segments, the value proposition, the value curve, the beachhead segment and growth loops.",
+      "source": "./plugins/product",
+      "category": "productivity"
+    },
+    {
+      "name": "app-stack",
+      "description": "Build a SaaS app with coding agents on Next.js, Supabase, Clerk and Netlify: the path from idea to production, multi-tenant authorization, the production choices for Supabase and Clerk, environments and secrets, product design, transactional email, uptime monitoring, cookieless analytics, legal pages, remote MCP servers, ChatGPT plugins and embedded Claude agents.",
+      "source": "./plugins/app-stack",
+      "category": "development"
+    },
     {
       "name": "ai-shipping",
       "description": "Ship AI-built apps: document the app, review it for correctness, security and performance, have a fresh reviewer clear every push that deploys and every release, round after round, prove it with a test harness that fakes the right side, and release through a gate with the owner's go. Where the free pm-ai-shipping plugin moved: turn that one off once this is installed.",
@@ -26,9 +38,9 @@
       "category": "development"
     },
     {
-      "name": "app-stack",
-      "description": "Build a SaaS app with coding agents on Next.js, Supabase, Clerk and Netlify: the path from idea to production, multi-tenant authorization, the production choices for Supabase and Clerk, environments and secrets, product design, transactional email, uptime monitoring, cookieless analytics, legal pages, remote MCP servers, ChatGPT plugins and embedded Claude agents.",
-      "source": "./plugins/app-stack",
+      "name": "work-humanizer",
+      "description": "Edit AI-sounding work writing so it reads like a careful person wrote it, without changing what it says — or interview the writer and build the piece from their answers.",
+      "source": "./plugins/work-humanizer",
       "category": "development"
     }
   ]
