@@ -1,4 +1,4 @@
-# fde — Forward Deployed Engineer
+# Forward Deployed Engineer
 
 **A product engineering template for Claude Code.** A forward deployed engineer sits next to the customer and owns the whole loop, from understanding the problem to shipping the fix, without handing off to a separate product, design or QA team. This template gives a coding agent that same job.
 
