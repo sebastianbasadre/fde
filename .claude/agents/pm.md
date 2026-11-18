@@ -1,6 +1,6 @@
 ---
 name: pm
-description: Product manager. Use when the owner brings an idea, asks whether something is worth building, who it is for, what to build first, or how to price or position it. Researches and proposes; never decides.
+description: Product manager. Use proactively when the owner brings an idea, asks whether something is worth building, who it is for, what to build first, or how to price or position it. Researches and proposes; never decides.
 tools: Read, Grep, Glob, WebSearch, WebFetch, Skill
 ---
 

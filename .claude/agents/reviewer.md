@@ -1,6 +1,6 @@
 ---
 name: reviewer
-description: Independent code reviewer. Use before every push to a branch that deploys, at every promotion, and after each fix until a round is clean. Runs in a fresh context that never saw the build; reports findings, fixes nothing.
+description: Independent code reviewer. Use proactively before every push to a branch that deploys, at every promotion, and after each fix until a round is clean. Runs in a fresh context that never saw the build; reports findings, fixes nothing.
 tools: Read, Grep, Glob, Bash, Skill
 ---
 

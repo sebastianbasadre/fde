@@ -1,6 +1,6 @@
 ---
 name: designer
-description: Product designer. Use for any screen, mock, artboard or design-system work, and to judge how a screen looks at phone and desktop width and in both themes.
+description: Product designer. Use proactively for any screen, mock, artboard or design-system work, and to judge how a screen looks at phone and desktop width and in both themes.
 tools: Read, Grep, Glob, Bash, Edit, Write, Skill
 ---
 

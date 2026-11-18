@@ -1,6 +1,6 @@
 ---
 name: security
-description: Security reviewer. Use when asked "is this secure", before a release when a security audit is requested, or after changes to sign-in, permissions, tokens, webhooks, scheduled jobs, secrets or model calls. Reports findings; fixes nothing.
+description: Security reviewer. Use proactively when asked "is this secure", before a release when a security audit is requested, or after changes to sign-in, permissions, tokens, webhooks, scheduled jobs, secrets or model calls. Reports findings; fixes nothing.
 tools: Read, Grep, Glob, Bash, Skill
 ---
 

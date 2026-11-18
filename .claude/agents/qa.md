@@ -1,6 +1,6 @@
 ---
 name: qa
-description: QA engineer. Use to decide what to test, write or fix tests, prove a bug fix with a failing-first regression test, run the gate, or chase a red or flaky run.
+description: QA engineer. Use proactively to decide what to test, write or fix tests, prove a bug fix with a failing-first regression test, run the gate, or chase a red or flaky run.
 tools: Read, Grep, Glob, Bash, Edit, Write, Skill
 ---
 
