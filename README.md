@@ -4,11 +4,28 @@ A starting point for building a SaaS product with coding agents (Claude Code fir
 
 ## What it is
 
-One coding agent doing both jobs of a small product team: **product management** (is this worth building, for whom, what to build first) and **engineering** (build it, test it, review it, ship it). The template is not code and not an agent. It is the agent's instructions, `AGENTS.md`, plus a set of **skills** it switches on.
+A coding agent that covers both jobs of a small product team: **product management** (is this worth building, for whom, what to build first) and **engineering** (build it, test it, review it, ship it). The template is not code. It is the agent's instructions, `AGENTS.md`, a set of **skills** it switches on, and six **subagents** it can hand work to.
 
-**Skills are not agents.** A skill is a packaged method: instructions, checklists and scripts that the agent loads when a task calls for it, the way a person opens a playbook. There is still one agent, Claude Code, doing the work. Skills change *how* it works, not *who* works. The one exception is the `agent-teams` pack, which teaches the agent to hand a build or a review to *another* agent (Codex, Grok, Gemini, or a fresh Claude session), so the code is never cleared by the session that wrote it.
+**Skills are not agents.** A skill is a packaged method: instructions, checklists and scripts that the agent loads when a task calls for it, the way a person opens a playbook. Skills change *how* the agent works, not *who* works. The `agent-teams` pack also teaches it to hand a build or a review to an agent from another vendor (Codex, Grok, Gemini), so the code is never cleared by the session that wrote it.
 
-The skills come in six packs:
+## The team
+
+**Subagents are agents.** Each one is a file in [`.claude/agents/`](.claude/agents/): a role with its own instructions, its own tools and a fresh context. The main Claude Code session coordinates: it hands a task to the role whose description fits, or to the one you name ("ask the reviewer to look at this"), reads what comes back, and keeps every decision. Each role works by applying the skills below.
+
+| Role | File | Does | Can edit |
+|---|---|---|---|
+| PM | `pm.md` | Researches an idea, segments, competitors, value proposition; proposes what to build and the decision the owner must make | nothing |
+| Architect | `architect.md` | Turns agreed scope into a plan: stages, data model, permissions, integrations, risks and estimates | the architecture doc and plan, when asked |
+| Designer | `designer.md` | The design kit, screens and artboards; checks phone and desktop widths and both themes | `design/` and screen styles and markup |
+| Security | `security.md` | Reads the code against the threat model and reports concrete attacks | nothing |
+| QA | `qa.md` | Decides what to test, writes tests, proves fixes with failing-first tests, runs the gate | tests and test docs |
+| Reviewer | `reviewer.md` | Independent review of a diff before a push or release, until a round is clean | nothing |
+
+The roles that judge (PM, Security, Reviewer) edit nothing, so a finding is never quietly "fixed" by the one who raised it. The owner still decides what the product does, picks the design direction, and gives the go before anything irreversible. `AGENTS.md` prefers a reviewer from another model family; the Reviewer subagent is the fallback when none can run.
+
+## The skills
+
+They come in six packs:
 
 | Pack | Side | What it teaches the agent |
 |---|---|---|
@@ -28,6 +45,7 @@ The skills come in six packs:
 | [`AGENTS.md`](AGENTS.md) | The instructions every agent reads first. **Section 1** is how we build any app: ownership and authorization, threat model, stack, testing and delivery, working rules, and a table of what to open at each moment. **Section 2** is the product, left empty until the owner says what to build. |
 | [`CLAUDE.md`](CLAUDE.md) | One line, `@AGENTS.md`, so Claude Code loads the same file. |
 | [`.claude/settings.json`](.claude/settings.json) | Enables the skill packs `AGENTS.md` relies on: `product`, `ai-shipping`, `agent-teams`, `agent-harness`, `app-stack`, `work-humanizer`. |
+| [`.claude/agents/`](.claude/agents/) | The six subagents: PM, Architect, Designer, Security, QA, Reviewer. |
 | [`budgets.json`](budgets.json) + [`scripts/check_budgets.py`](scripts/check_budgets.py) | A word budget for `AGENTS.md` (3,800 words), checked in the test gate, so the entry file stays short enough to be read in full every session. |
 
 ## Starting a product from it
